@@ -75,6 +75,7 @@ void *connection_handler(void* socket_desc){
         for(int i = 0; i < clients_connected; i++){
             send(clients[i], client_message, sizeof(client_message), NULL);
         }
+        memset(client_message, 0, sizeof(client_message));
     }
 
     if(read_size == 0){

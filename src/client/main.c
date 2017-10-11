@@ -38,6 +38,7 @@ void chat(){
 	pthread_t received_thread;
 
 	while(1){
+		fflush(stdin);
 		pthread_create(&send_thread, NULL, send_message, (void*)NULL);
 		receive_message(NULL);
 	}
@@ -45,13 +46,14 @@ void chat(){
 }
 
 void *send_message(void *t){
-	char s[2000] = {};
+	char s[2000];
 	printf("%s\n", "Message >> ");
 	fgets(s, sizeof(s), stdin);
-	if(strcmp(s, "quit") == 0){
+	if(strcmp(s, "quit\n") == 0){
 		exit(0);
 	}
 	send(socket_desc, s, strlen(s), 0);
+	memset(s, 0, sizeof(s));
 }
 
 void *receive_message(void *t){
@@ -59,4 +61,5 @@ void *receive_message(void *t){
 	if(recv(socket_desc, message, 2000, 0) > 0){
 		printf("Message received: %s\n", message);
 	}
+	memset(message, 0, sizeof(message));
 }
