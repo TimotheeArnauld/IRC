@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 
 #include "../lib/fonts/font.h"
+#include "../lib/aes/aes.h"
 
 #define SOFTWARE_NAME "IRC free client"
 #define VERSION "V.0.0.1"
@@ -31,4 +32,4 @@ void *receive_message(void *t);
 void menu();
 void available_commands();
 void chat();
-
+char *encrypt__(int i, char * buf, int sz);
