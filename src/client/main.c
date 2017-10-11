@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 int main(int argc, char** argv){
 	socket_desc = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -32,10 +31,27 @@ void available_commands(){
 	printf("%s\n", format_string(AVAILABLE_COMMANDS, 2, WHITE, NORMAL));
 }
 
+char *call_module_python_(){
+	PyObject *ret, *module, *function, *arg;
+    char *result;
+    Py_Initialize();   
+   	PySys_SetPath(".");
+    module = PyImport_ImportModule("test");
+    function = PyObject_GetAttrString(module, "yolo");
+    arg = Py_BuildValue("(s)", "WELCOME");
+    ret = PyEval_CallObject(function, arg);
+    PyArg_Parse(ret, "s", &result);
+    Py_Finalize(); 
+    return result;
+}
+
 void chat(){
 	send(socket_desc, SIGNAL_CONNECTED, strlen(SIGNAL_CONNECTED), 0);
 	pthread_t send_thread;
 	pthread_t received_thread;
+
+	char *s = call_module_python_();
+	printf("%s\n", s);
 
 	while(1){
 		fflush(stdin);
