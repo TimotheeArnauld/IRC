@@ -12,7 +12,7 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-#include "font.h"
+#include "../lib/fonts/font.h"
 
 #define SOCKET_IP_ADDRESS "127.0.0.1"
 #define SOCKET_PORT 1330

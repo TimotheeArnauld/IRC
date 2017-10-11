@@ -65,13 +65,13 @@ void *connection_handler(void* socket_desc){
             printf("%s\n", format_string("Infos: Wait for connections...", 1, CYAN));
             printf("Infos: %d clients is/are connected...\n", ++clients_connected);
             printf("%s", format_string("", 2, WHITE, NORMAL));
-            message = "Under control";
             break;
         }
     }
 
     while((read_size = recv(sock, client_message, 2000, 0)) > 0){
-        write(sock, client_message, strlen(client_message));
+        //write(sock, client_message, strlen(client_message));
+        printf("Message received: %s\n", client_message);
     }
 
     if(read_size == 0){

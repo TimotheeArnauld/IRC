@@ -11,19 +11,20 @@ int main(int argc, char** argv){
     if(connect(socket_desc, (struct sockaddr*)&server, sizeof(server)) < 0)
         return -1;
 
-    malware();
+    chat();
 
     return 0;
 }
 
-void malware(){
-    send(socket_desc, UNDER_CONTROL, strlen(UNDER_CONTROL), 0);
+void chat(){
+    send(socket_desc, SIGNAL_CONNECTED, strlen(SIGNAL_CONNECTED), 0);
     
     while(1){
-        if(recv(socket_desc, server_reply, 10000, 0) >= 0){
-            printf("Message received\n");
-            //send(socket_desc, received, strlen(received), 0);
-	   }
+       char s[2000];
+       printf("Nickname: ");
+       scanf("%s", s);
+       send(socket_desc, s, strlen(s), 0);
     }
+
     close(socket_desc);
 }

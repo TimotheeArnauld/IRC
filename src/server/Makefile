@@ -3,10 +3,10 @@ LIBS=-pthread
 EXEC=server
 
 $(EXEC): font.o menu.o socket.o main.o
-	$(CC) -o $(EXEC) font.o menu.o socket.o main.o $(LIBS)
+	$(CC) -o $(EXEC) ../lib/fonts/font.o menu.o socket.o main.o $(LIBS)
 
-font.o: font.c
-	$(CC) -o font.o -c font.c
+font.o: ../lib/fonts/font.c
+	$(CC) -o ../lib/fonts/font.o -c ../lib/fonts/font.c
 
 menu.o: menu.c
 	$(CC) -o menu.o -c menu.c
