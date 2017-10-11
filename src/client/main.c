@@ -28,9 +28,7 @@ void menu(){
 }
 
 void available_commands(){
-	__return__(3);
 	printf("%s\n", format_string(AVAILABLE_DISPLAY, 2, WHITE, NORMAL));
-	__return__(1);
 	printf("%s\n", format_string(AVAILABLE_COMMANDS, 2, WHITE, NORMAL));
 }
 
@@ -47,9 +45,9 @@ void chat(){
 }
 
 void *send_message(void *t){
-	char s[2000] = "";
+	char s[2000] = {};
 	printf("%s\n", "Message >> ");
-	scanf("%s", s);
+	fgets(s, sizeof(s), stdin);
 	if(strcmp(s, "quit") == 0){
 		exit(0);
 	}
