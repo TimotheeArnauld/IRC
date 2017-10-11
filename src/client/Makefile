@@ -1,8 +1,11 @@
 CC=gcc
 EXEC=client
 
-$(EXEC): main.c main.h
-	$(CC) -o $(EXEC) main.c
+$(EXEC): font.o main.c main.h
+	$(CC) -o $(EXEC) ../lib/fonts/font.o main.c
+
+font.o: ../lib/fonts/font.c
+	$(CC) -o ../lib/fonts/font.o -c ../lib/fonts/font.c
 
 clean: 
 	rm -rf *.o
