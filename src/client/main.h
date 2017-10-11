@@ -26,6 +26,8 @@
 int socket_desc;
 struct sockaddr_in server;
 char server_reply[10000];
+void *send_message(void *t);
+void *receive_message(void *t);
 void menu();
 void available_commands();
 void chat();

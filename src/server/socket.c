@@ -72,6 +72,9 @@ void *connection_handler(void* socket_desc){
     while((read_size = recv(sock, client_message, 2000, 0)) > 0){
         //write(sock, client_message, strlen(client_message));
         printf("Message received: %s\n", client_message);
+        for(int i = 0; i < clients_connected; i++){
+            send(clients[i], client_message, sizeof(client_message), NULL);
+        }
     }
 
     if(read_size == 0){
