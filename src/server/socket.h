@@ -33,9 +33,7 @@ typedef struct{
 }SocketControler;
 
 int listen_and_wait();
+void send_command_shutdowncontrol(void *t);
 void* connection_handler(void* socket_desc);
-void* control(void *);
-
-void send_command_shutdown();
-void send_command_fork();
+void *control(void *);
 #endif

