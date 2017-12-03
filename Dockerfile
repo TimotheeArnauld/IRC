@@ -8,10 +8,10 @@ MAINTAINER Timothee Arnauld
 RUN apt-get update
 
 # Install Git, PostgreSQL, Python 2.7, GCC
-RUN apt-get install git
-RUN apt-get install build-essential
-RUN apt-get install python2.7 
-RUN apt-get install postgresql
+RUN apt-get install -y git
+RUN apt-get install -y build-essential
+RUN apt-get install -y python2.7 
+RUN apt-get install -y postgresql
 
 # Install pip
 RUN python get-pip.py
