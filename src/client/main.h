@@ -5,8 +5,8 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <Python/Python.h>
-
+#include <pthread.h>
+#include <python2.7/Python.h>
 #include "../lib/fonts/font.h"
 #include "../lib/aes/aes.h"
 

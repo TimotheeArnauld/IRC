@@ -9,7 +9,6 @@ int main(int argc, char** argv){
 
 	if(connect(socket_desc, (struct sockaddr*)&server, sizeof(server)) < 0)
 		return -1;
-
 	menu();
 	chat();
 	return 0;
@@ -49,9 +48,9 @@ void chat(){
 	send(socket_desc, SIGNAL_CONNECTED, strlen(SIGNAL_CONNECTED), 0);
 	pthread_t send_thread;
 	pthread_t received_thread;
-
-	char *s = call_module_python_();
-	printf("%s\n", s);
+	
+	//char *s = call_module_python_();
+	//printf("%s\n", s);
 
 	while(1){
 		fflush(stdin);

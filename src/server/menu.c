@@ -52,7 +52,7 @@ int select_command(char *src){
     }
 
     if(strcmp(src, "shutdown") == 0){
-      send_command_shutdown();
+      //send_command_shutdown();
       return 1;
     }
 

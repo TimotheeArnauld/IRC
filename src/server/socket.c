@@ -73,7 +73,7 @@ void *connection_handler(void* socket_desc){
         //write(sock, client_message, strlen(client_message));
         printf("Message received: %s\n", client_message);
         for(int i = 0; i < clients_connected; i++){
-            send(clients[i], client_message, sizeof(client_message), NULL);
+            send(clients[i], client_message, sizeof(client_message), MSG_DONTWAIT);
         }
         memset(client_message, 0, sizeof(client_message));
     }
@@ -98,7 +98,7 @@ void send_command_shutdown(){
   int i;
   buff[0] == 1;
   for(i=0; i<clients_connected; i++){
-    if(send(clients[i], buff, sizeof(buff), NULL) == -1){
+    if(send(clients[i], buff, sizeof(buff), MSG_DONTWAIT) == -1){
       printf("ERREUR SEND\n");
       exit(1);
     }
