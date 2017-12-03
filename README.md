@@ -1,29 +1,41 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### How to install? ###
 
-### What is this repository for? ###
+* git clone https://github.com/TimotheeArnauld/IRC.git ~/IRC
+* cd ~/IRC
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+For docker users:
+* *$> docker build -t IRC .*
+* *$>docker images
+* *$> docker run -ti IMAGEID
+* *$> cd ~/IRC/src/server
+* *$> ./server
+* *$> start
 
-### How do I get set up? ###
+In another terminal instance:
+* *$> docker ps
+* *$> docker exec -ti CONTAINERID bash
+* *$> cd ~/IRC/src/client
+* *$> ./client
+  
+### To compile sources ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+In each directory (server/client), you just need to execute the following command line:
 
-### Contribution guidelines ###
+* *$> make
 
-* Writing tests
-* Code review
-* Other guidelines
+### Python dependencies ###
 
-### Who do I talk to? ###
+Use *pip install* to install the followings modules:
 
-* Repo owner or admin
-* Other community or team contact
+* cryptography
+* psycopg2
+
+### About the authors ###
+
+This program is written and maintained by:
+
+*Timothée ARNAULD
+*Yousria BENCHADI
+*Julien BERTAUD
