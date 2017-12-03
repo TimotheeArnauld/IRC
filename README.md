@@ -36,6 +36,6 @@ Use *pip install* to install the followings modules:
 
 This program is written and maintained by:
 
-* *Timothée **ARNAULD** *
-* *Yousria **BENCHADI** *
-* *Julien **BERTAUD** *
+* *Timothée* **ARNAULD**
+* *Yousria* **BENCHADI**
+* *Julien* **BERTAUD**
