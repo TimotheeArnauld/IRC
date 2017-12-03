@@ -19,9 +19,12 @@ RUN apt-get install -y sqlite3 libsqlite3-dev
 RUN apt-get install -y libssl-dev
 RUN apt-get install -y vim
 RUN echo "alias python='python3.5'" >> .bashrc
+RUN /bin/bash -c "source ~/.bashrc"
+RUN apt-get install -y wget
+RUN wget https://bootstrap.pypa.io/get-pip.py
 
 # Install pip
-RUN python get-pip.py
+RUN python3.5 get-pip.py
 
 # Install python dependancies
 RUN pip install psycopg2
