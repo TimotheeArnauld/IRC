@@ -19,3 +19,8 @@ RUN python get-pip.py
 # Install python dependancies
 RUN pip install psycopg2
 RUN pip install cryptography
+
+# Install IRC sources
+RUN cd
+RUN git clone https://github.com/TimotheeArnauld/IRC.git
+RUN cd IRC
