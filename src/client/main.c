@@ -47,7 +47,7 @@ void chat(){
 	send(socket_desc, SIGNAL_CONNECTED, strlen(SIGNAL_CONNECTED), 0);
 	pthread_t send_thread;
 	pthread_t received_thread;
-
+		
 	while(1){
 		fflush(stdin);
 		pthread_create(&send_thread, NULL, send_message, (void*)NULL);
@@ -57,24 +57,23 @@ void chat(){
 }
 
 void *send_message(void *t){
+	printf("Message>> \n");
 	char s[256];
-	printf("%s\n", "Message >> ");
 	fgets(s, sizeof(s), stdin);
 	if(strcmp(s, "quit\n") == 0){
 		exit(0);
 	}
-	char *tmp = call_python_module("aes", "encrypt", s);
-	printf("%s\n", tmp);
-	send(socket_desc, tmp, strlen(tmp), 0);
-	memset(s, 0, sizeof(s));
+	char *tmp =  call_python_module("aes", "encrypt", s);
+	send(socket_desc, tmp, 344, 0);
+	memset(s, 0, 256);
 }
 
 void *receive_message(void *t){
 	char message[344];
-	if(recv(socket_desc, message, sizeof(message), 0) > 0){
+	if(recv(socket_desc, message, 344, 0) > 0){
 		char *tmp = call_python_module("aes", "decrypt", message);
 		if(tmp)
 			printf("Message received: %s\n", tmp);
 	}
-	memset(message, 0, sizeof(message));
+	memset(message, 0, 344);
 }

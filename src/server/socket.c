@@ -55,7 +55,7 @@ void *control(void *t){
 void *connection_handler(void* socket_desc){
     int sock = *(int*)socket_desc;
     int read_size;
-    char *message, client_message[2000];
+    char client_message[344];
     int loop = 1;
 
     while(loop && recv(sock, client_message, 344, 0) > 0){
@@ -70,12 +70,11 @@ void *connection_handler(void* socket_desc){
     }
 
     while((read_size = recv(sock, client_message, 344, 0)) > 0){
-        //write(sock, client_message, strlen(client_message));
         printf("Message received: %s\n", client_message);
         for(int i = 0; i < clients_connected; i++){
             send(clients[i], client_message, 344, MSG_DONTWAIT);
 	}
-        memset(client_message, 0, sizeof(client_message));
+        memset(client_message, 0, sizeof(344));
     }
 
     if(read_size == 0){
