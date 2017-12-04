@@ -5,8 +5,8 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <Python/Python.h>
-
+#include <python2.7/Python.h>
+#include <pthread.h>
 #include "../lib/fonts/font.h"
 #include "../lib/aes/aes.h"
 
@@ -28,7 +28,7 @@
 int socket_desc;
 struct sockaddr_in server;
 char server_reply[10000];
-char *call_python_module_();
+char *call_python_module_(char* mod, char* fun, char* att);
 void *send_message(void *t);
 void *receive_message(void *t);
 void menu();

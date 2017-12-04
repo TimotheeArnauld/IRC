@@ -9,9 +9,11 @@ int main(int argc, char** argv){
 
 	if(connect(socket_desc, (struct sockaddr*)&server, sizeof(server)) < 0)
 		return -1;
-
+	
+	Py_Initialize();
 	menu();
 	chat();
+	Py_Finalize();
 	return 0;
 }
 
@@ -31,27 +33,20 @@ void available_commands(){
 	printf("%s\n", format_string(AVAILABLE_COMMANDS, 2, WHITE, NORMAL));
 }
 
-char *call_module_python_(){
-	PyObject *ret, *module, *function, *arg;
-    char *result;
-    Py_Initialize();   
-   	PySys_SetPath(".");
-    module = PyImport_ImportModule("test");
-    function = PyObject_GetAttrString(module, "yolo");
-    arg = Py_BuildValue("(s)", "WELCOME");
-    ret = PyEval_CallObject(function, arg);
-    PyArg_Parse(ret, "s", &result);
-    Py_Finalize(); 
-    return result;
+char *call_python_module(char *mod, char *fun, char* att){
+	PyObject *pName, *pModule, *pFunction, *pArg, *pValue;
+	pName = PyString_FromString(mod);
+	pModule = PyImport_Import(pName);
+	pArg = PyTuple_New(1);
+	PyTuple_SetItem(pArg, 0, PyString_FromString(att));
+	pFunction = PyObject_GetAttrString(pModule, fun);
+	return PyString_AsString(PyObject_CallObject(pFunction, pArg));
 }
 
 void chat(){
 	send(socket_desc, SIGNAL_CONNECTED, strlen(SIGNAL_CONNECTED), 0);
 	pthread_t send_thread;
 	pthread_t received_thread;
-
-	char *s = call_module_python_();
-	printf("%s\n", s);
 
 	while(1){
 		fflush(stdin);
@@ -62,20 +57,24 @@ void chat(){
 }
 
 void *send_message(void *t){
-	char s[2000];
+	char s[256];
 	printf("%s\n", "Message >> ");
 	fgets(s, sizeof(s), stdin);
 	if(strcmp(s, "quit\n") == 0){
 		exit(0);
 	}
-	send(socket_desc, s, strlen(s), 0);
+	char *tmp = call_python_module("aes", "encrypt", s);
+	printf("%s\n", tmp);
+	send(socket_desc, tmp, strlen(tmp), 0);
 	memset(s, 0, sizeof(s));
 }
 
 void *receive_message(void *t){
-	char message[2000];
-	if(recv(socket_desc, message, 2000, 0) > 0){
-		printf("Message received: %s\n", message);
+	char message[344];
+	if(recv(socket_desc, message, sizeof(message), 0) > 0){
+		char *tmp = call_python_module("aes", "decrypt", message);
+		if(tmp)
+			printf("Message received: %s\n", tmp);
 	}
 	memset(message, 0, sizeof(message));
 }
