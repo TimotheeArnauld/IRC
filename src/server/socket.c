@@ -74,7 +74,7 @@ void *connection_handler(void* socket_desc){
         printf("Message received: %s\n", client_message);
         for(int i = 0; i < clients_connected; i++){
             send(clients[i], client_message, 344, MSG_DONTWAIT);
-        }
+	}
         memset(client_message, 0, sizeof(client_message));
     }
 
