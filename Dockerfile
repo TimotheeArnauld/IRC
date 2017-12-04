@@ -30,6 +30,7 @@ RUN pip install cryptography
 
 # Install IRC sources
 RUN git clone https://github.com/TimotheeArnauld/IRC.git ~/IRC
+RUN echo "export PYTHONPATH=$PYTHONPATH:/root/IRC/src/client/modules" >> ~/.bashrc
 RUN cd ~/IRC
 
 RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
