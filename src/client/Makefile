@@ -10,7 +10,7 @@ font.o: ../lib/fonts/font.c
 	$(CC) -o ../lib/fonts/font.o -c ../lib/fonts/font.c
 
 main.o: main.c
-	$(CC) $(CFLAGS) -o main.o -c main.c
+	$(CC) $(CFLAGS) -o main.o -c main.c 
 
 clean: 
 	rm -rf *.o

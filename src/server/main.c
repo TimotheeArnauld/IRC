@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "socket.h"
+#include "menu.h"
 
 int main(int argc, char**argv){
 	menu();
