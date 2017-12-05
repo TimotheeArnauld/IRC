@@ -1,4 +1,8 @@
+#include <ncurses.h>
 #include "main.h"
+
+WINDOW *create_newwin(int h, int w, int x, int y, int border);
+void destroy_win(WINDOW *local_win);
 
 int main(int argc, char** argv){
 	socket_desc = socket(AF_INET, SOCK_STREAM, 0);
@@ -10,27 +14,46 @@ int main(int argc, char** argv){
 	if(connect(socket_desc, (struct sockaddr*)&server, sizeof(server)) < 0)
 		return -1;
 	
+	initscr();
+	start_color();
+	raw();
 	Py_Initialize();
 	menu();
 	chat();
 	Py_Finalize();
+	endwin();
+
 	return 0;
 }
 
 void menu(){
-	system("clear");
-	printf("%s\
-		%s\n", format_string(SOFTWARE_NAME, 2, BOLD, BLUE), format_string(VERSION, 2, BOLD, GREEN));
+	int row, col;
+	getmaxyx(stdscr, row, col);
 
-	printf("%s\n\
-		%s\n", format_string(COPYRIGHT_MESS,2, BOLD, YELLOW ), format_string(WELCOME_MESS, 2, UNDERLINED, RED));
+	WINDOW *menu_win = create_newwin(8, col, 0, 0, 1);
 
-	available_commands();
-}
+	init_pair(1, COLOR_BLUE, COLOR_BLACK);
+	wattron(menu_win, A_BOLD | COLOR_PAIR(1));
+	mvwprintw(menu_win, 1, 1, SOFTWARE_NAME);
+	wattroff(menu_win, A_BOLD | COLOR_PAIR(1));
 
-void available_commands(){
-	printf("%s\n", format_string(AVAILABLE_DISPLAY, 2, WHITE, NORMAL));
-	printf("%s\n", format_string(AVAILABLE_COMMANDS, 2, WHITE, NORMAL));
+	init_pair(2, COLOR_GREEN, COLOR_BLACK);
+	wattron(menu_win, A_BOLD | COLOR_PAIR(2));
+	mvwprintw(menu_win, 2, 1, VERSION);
+	wattroff(menu_win, A_BOLD | COLOR_PAIR(2));
+
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	wattron(menu_win, A_BOLD | COLOR_PAIR(3));
+	mvwprintw(menu_win, 3, 1, COPYRIGHT_MESS);
+	wattroff(menu_win, A_BOLD | COLOR_PAIR(3));
+
+	init_pair(4, COLOR_RED, COLOR_BLACK);
+	wattron(menu_win, COLOR_PAIR(4));
+	mvwprintw(menu_win, 4, 1, WELCOME_MESS);
+	wattroff(menu_win, COLOR_PAIR(4));
+
+	mvwprintw(menu_win, 5, 1, "Enter /help to see available commands.");	
+	wrefresh(menu_win);
 }
 
 char *call_python_module(char *mod, char *fun, char* att){
@@ -58,12 +81,20 @@ void chat(){
 }
 
 void *send_message(void *t){
+	int col, row;
+	getmaxyx(stdscr, row, col);
+	
+	WINDOW *input_win = create_newwin(3, col, row - 3, 0, 1);	
+
 	while(1){
 		fflush(stdin);
-		printf("Message>>");
+		wclear(input_win);
+		wborder(input_win, '|', '|', '-', '-', '+', '+', '+', '+');
+		mvwprintw(input_win, 1, 1, "Message>>");
 		char s[256];
-		fgets(s, sizeof(s), stdin);
-		if(strcmp(s, "quit\n") == 0){
+		mvwgetstr(input_win, 1, sizeof("Message>>") + 1, s);
+		if(strcmp(s, "/quit") == 0){
+			endwin();
 			exit(-1);
 		}
 		char *tmp =  call_python_module("aes", "encrypt", s);
@@ -71,19 +102,45 @@ void *send_message(void *t){
 		memset(tmp, 0, 344);
 		memset(s, 0, 256);
 	}
+	destroy_win(input_win);
 }
 
 void *receive_message(void *t){
+	int col, row;
+	getmaxyx(stdscr, row, col);
+	
+	WINDOW *chat_win = create_newwin(10, col, 10, 0, 0); 
+	scrollok(chat_win, TRUE);
+	wclear(chat_win);
+	wrefresh(chat_win);
+
 	while(1){
 		char message[344];
 		if(recv(socket_desc, message, 344, 0) > 0){
-			printf("Message received: ");
 			char *tmp = call_python_module("aes", "decrypt", message);
 			if(tmp){
-				printf("%s\n", tmp);
-				//free(tmp);
+				wprintw(chat_win, "%s\n", tmp);
+				wrefresh(chat_win);
 			}
 		}
 		memset(message, 0, 344);
 	}
+}
+
+WINDOW *create_newwin(int h, int w, int  x, int y, int border){
+	WINDOW *local_win;
+	local_win = newwin(h, w, x, y);
+	if(border == 1){
+		wborder(local_win, '|', '|', '-', '-', '+', '+', '+', '+');
+	}else{
+		wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+	}
+	wrefresh(local_win);
+	return local_win;
+}
+
+void destroy_win(WINDOW *local_win){
+	wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+	wrefresh(local_win);
+	delwin(local_win);
 }
