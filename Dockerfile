@@ -20,6 +20,7 @@ RUN apt-get install -y wget
 RUN apt-get install -y man
 RUN apt-get install -y net-tools
 RUN apt-get install -y libncurses-dev
+RUN apt-get install -y cmake
 RUN wget https://bootstrap.pypa.io/get-pip.py
 
 # Install pip
