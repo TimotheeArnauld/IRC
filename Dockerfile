@@ -38,4 +38,12 @@ RUN cd ~/IRC
 RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
 RUN sh ~/.vim_runtime/install_awesome_vimrc.sh
 
-RUN service postgresql start
+USER postgres
+
+RUN    /etc/init.d/postgresql start &&\
+	psql --command "CREATE USER ircrypto WITH SUPERUSER PASSWORD 'ircrypto';" &&\
+    createdb -O ircrypto ircrypto
+
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/9.5/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
+RUN /etc/init.d/postgresql restart
