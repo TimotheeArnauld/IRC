@@ -8,7 +8,7 @@
 #include <python2.7/Python.h>
 #include <pthread.h>
 #include "../lib/fonts/font.h"
-#include "../lib/aes/aes.h"
+
 
 #define SOFTWARE_NAME "IRC free client"
 #define VERSION "V.0.0.1"
