@@ -33,17 +33,15 @@ RUN pip install cryptography
 # Install IRC sources
 RUN git clone https://github.com/TimotheeArnauld/IRC.git ~/IRC
 RUN echo "export PYTHONPATH=$PYTHONPATH:/root/IRC/src/client/modules" >> ~/.bashrc
-RUN cd ~/IRC
 
 RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
 RUN sh ~/.vim_runtime/install_awesome_vimrc.sh
 
 USER postgres
-
-RUN    /etc/init.d/postgresql start &&\
-	psql --command "CREATE USER ircrypto WITH SUPERUSER PASSWORD 'ircrypto';" &&\
-    createdb -O ircrypto ircrypto
-
+RUN /etc/init.d/postgresql start && psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" && createdb -O docker docker
 RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/9.5/main/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
-RUN /etc/init.d/postgresql restart
+
+EXPOSE 5432
+
+USER root
