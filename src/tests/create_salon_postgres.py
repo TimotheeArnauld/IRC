@@ -13,8 +13,13 @@ def create_salon(idUser, nameSalon):
         con = psycopg2.connect(conn_string)
         cursor = con.cursor()
         print "Connected!\n"
+        query = "INSERT INTO rooms(room_name) VALUES ('{0}');".format(nameSalon)
 
-        cursor.execute("INSERT INTO Salon(Name,Id_User,Name_User) VALUES(%s,%s,'Julien')", (idUser, nameSalon))
+        cursor.execute(query)
+        cursor.execute("INSERT INTO rooms(room_name) VALUES(%s)", (nameSalon))
+        cursor.execute("SELECT room_id FROM rooms WHERE room_name = (%s)",(nameSalon))
+        idRoom = cursor.fetchall()
+        cursor.execute("INSERT INTO users_rooms VALUES(%d,%s)", (idUser,idRoom))
 
         print "ok\n"
         cursor.close()
