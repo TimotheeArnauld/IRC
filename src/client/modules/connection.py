@@ -1,8 +1,6 @@
 #!/usr/bin/python
 import psycopg2
 import sys
-import socket
-import getpass
 import md5
 
 def inscription_connection(name, password):
@@ -35,4 +33,3 @@ def inscription_connection(name, password):
 		if conn is not None:
 			cur.close()
 			conn.close()
-
