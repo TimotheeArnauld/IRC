@@ -15,7 +15,7 @@ def create_tables():
         """ CREATE TABLE rooms (
                 room_id SERIAL PRIMARY KEY,
                 room_name VARCHAR(255) NOT NULL
-                )
+        )
         """,
         """
         CREATE TABLE users_rooms (
