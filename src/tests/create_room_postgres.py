@@ -3,7 +3,7 @@
 import psycopg2
 import sys
 
-def create_salon(idUser, nameSalon):
+def create_room(idUser, nameSalon):
     con = None
     print idUser
     try:
@@ -13,15 +13,14 @@ def create_salon(idUser, nameSalon):
         con = psycopg2.connect(conn_string)
         cursor = con.cursor()
         print "Connected!\n"
-        query = "INSERT INTO rooms(room_name) VALUES ('{0}');".format(nameSalon)
 
-        cursor.execute(query)
-        cursor.execute("INSERT INTO rooms(room_name) VALUES(%s)", (nameSalon))
-        cursor.execute("SELECT room_id FROM rooms WHERE room_name = (%s)",(nameSalon))
+        cursor.execute("INSERT INTO rooms(room_name) VALUES ('{0}');".format(nameSalon))
+        cursor.execute("SELECT room_id FROM rooms WHERE room_name = ('{0}')".format(nameSalon))
+
         idRoom = cursor.fetchall()
-        cursor.execute("INSERT INTO users_rooms VALUES(%d,%s)", (idUser,idRoom))
+        cursor.execute("INSERT INTO users_rooms VALUES({0},{1})".format(idUser, idRoom[0][0]))
 
-        print "ok\n"
+        return "ok"
         cursor.close()
         con.commit()
 
@@ -30,6 +29,7 @@ def create_salon(idUser, nameSalon):
         if con:
             con.rollback()
 
+        return "ko"
         print 'Error %s' % e
         sys.exit(1)
 
@@ -41,5 +41,5 @@ def create_salon(idUser, nameSalon):
 
 if __name__ == '__main__':
     idUser = 101
-    nameSalon = "test"
-    create_salon(idUser,nameSalon)
+    nameSalon = "general"
+    create_room(idUser,nameSalon)

@@ -5,7 +5,7 @@ import sys
 
 def drop_room(idUser, nameRoom):
     con = None
-    print idUser
+
     try:
 
         conn_string = "host='localhost' dbname='docker' user='docker' password='docker'"
@@ -14,12 +14,12 @@ def drop_room(idUser, nameRoom):
         cursor = con.cursor()
         print "Connected!\n"
 
-		cursor.execute("SELECT room_id FROM users_rooms WHERE user_id = (%s)",(idUser))
-		idRoom = cursor.fetchall()
-		DELETE FROM rooms WHERE room_id IN (SELECT room_id FROM rooms WHERE room_name = (%s) AND room_id = (%s)",(nameRoom,idRoom);
-		DELETE FROM rooms WHERE room_id IN (SELECT room_id FROM rooms WHERE room_name = (%s) AND room_id IN (SELECT room_id FROM users_rooms WHERE user_id = (%s)",(idUser)),(nameRoom);
+        cursor.execute("SELECT room_id FROM users_rooms WHERE user_id = ('{0}');".format(idUser))
+        idRoom = cursor.fetchall()
+        cursor.execute("DELETE FROM rooms WHERE room_name = '{0}' AND room_id = {1};".format(nameRoom,idRoom[0][0]))
+        cursor.execute("DELETE FROM users_rooms WHERE user_id = '{0}' AND room_id = {1};".format(idUser,idRoom[0][0]))
 
-        print "ok\n"
+        return "ok"
         cursor.close()
         con.commit()
 
@@ -39,5 +39,5 @@ def drop_room(idUser, nameRoom):
 
 if __name__ == '__main__':
     idUser = 101
-    nameSalon = "test"
-    create_salon(idUser,nameSalon)
+    nameSalon = "general"
+    drop_room(idUser,nameSalon)

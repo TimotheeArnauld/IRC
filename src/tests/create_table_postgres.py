@@ -13,13 +13,14 @@ def create_tables():
         cursor = con.cursor()
         print "Connected!\n"
 
-        cursor.execute("DROP TABLE IF EXISTS users")
-    	cursor.execute("DROP TABLE IF EXISTS rooms")
-    	cursor.execute("DROP TABLE IF EXISTS users_rooms")
+        cursor.execute("DROP TABLE IF EXISTS users CASCADE")
+    	cursor.execute("DROP TABLE IF EXISTS rooms CASCADE")
+    	cursor.execute("DROP TABLE IF EXISTS users_rooms CASCADE")
     	cursor.execute("CREATE TABLE users (user_id SERIAL PRIMARY KEY,user_name VARCHAR(255) NOT NULL,user_password VARCHAR(255) NOT NULL)")
     	cursor.execute("CREATE TABLE rooms (room_id SERIAL PRIMARY KEY,room_name VARCHAR(255) NOT NULL)")
     	cursor.execute("CREATE TABLE users_rooms (user_id INTEGER NOT NULL,room_id INTEGER NOT NULL,PRIMARY KEY (room_id , user_id),FOREIGN KEY (user_id) REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE CASCADE,FOREIGN KEY (room_id) REFERENCES rooms (room_id) ON UPDATE CASCADE ON DELETE CASCADE)")
 
+        cursor.execute("INSERT INTO users VALUES(101,'Julien','toto')")
         cursor.close()
         con.commit()
         print "Table ok\n"
