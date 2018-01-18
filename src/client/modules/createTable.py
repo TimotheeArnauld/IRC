@@ -29,6 +29,16 @@ def create_tables():
                     REFERENCES rooms (room_id)
                     ON UPDATE CASCADE ON DELETE CASCADE
         )
+        """, 
+        """
+        CREATE TABLE users_files (
+                user_id INTEGER NOT NULL,
+                file_name VARCHAR(255) NOT NULL,
+                PRIMARY KEY (file_name , user_id),
+                FOREIGN KEY (user_id)
+                    REFERENCES users (user_id)
+                    ON UPDATE CASCADE ON DELETE CASCADE
+        )
         """)
     conn = None
     try:
