@@ -100,6 +100,7 @@ void *send_message(void *t){
 		}else{
 		 	char *tmp =  call_python_module("aes", "encrypt", cmd);
 		 	printf("%s", tmp);
+		 }
 		// 	send(socket_desc, tmp, 344, 0);
 		// 	memset(tmp, 0, 344);
 		// 	memset(s, 0, 256);
