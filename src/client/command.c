@@ -7,7 +7,7 @@ char* command_analyse(char s[256]){
 	pArg = PyTuple_New(1);
 	PyTuple_SetItem(pArg, 0, PyString_FromString(s));
 	pFunction = PyObject_GetAttrString(pModule, "queryBuilder");
-	char command* =  PyString_AsString(PyObject_CallObject(pFunction, pArg));
+	char *command =  PyString_AsString(PyObject_CallObject(pFunction, pArg));
 
 	if(strcmp(command, "-1") == 0){
 		return "-1";
