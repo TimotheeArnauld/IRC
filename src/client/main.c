@@ -94,17 +94,16 @@ void *send_message(void *t){
 		char s[256];
 		mvwgetstr(input_win, 1, sizeof("Message>>") + 1, s);
 
-		char *cmd = command_analyse(call_python_module("builder", "queryBuilder", s));
+		char *cmd = call_python_module("builder", "queryBuilder", s);
 		if(strcmp(cmd, "-1") == 0){
 			printf("Bad instruction or command. Type /help to see available commands");
 		}else{
 		 	char *tmp =  call_python_module("aes", "encrypt", cmd);
 		 	printf("%s", tmp);
-		 }
-		// 	send(socket_desc, tmp, 344, 0);
-		// 	memset(tmp, 0, 344);
-		// 	memset(s, 0, 256);
-		// }
+		  	send(socket_desc, tmp, 344, 0);
+		 	memset(tmp, 0, 344);
+		 	memset(s, 0, 256);
+		}
 	}
 	destroy_win(input_win);
 }
