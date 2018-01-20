@@ -8,6 +8,7 @@
 #include <python2.7/Python.h>
 #include <pthread.h>
 #include "../lib/fonts/font.h"
+#include "command.h"
 
 
 #define SOFTWARE_NAME "IRC free client"

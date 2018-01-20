@@ -93,14 +93,16 @@ void *send_message(void *t){
 		mvwprintw(input_win, 1, 1, "Message>>");
 		char s[256];
 		mvwgetstr(input_win, 1, sizeof("Message>>") + 1, s);
-		if(strcmp(s, "/quit") == 0){
-			endwin();
-			exit(-1);
+
+		char *cmd = command_analyse(s);
+		if(strcmp(cmd, "-1") == 0){
+			printf("Bad instruction or command. Type /help to see available commands");
+		}else{
+			char *tmp =  call_python_module("aes", "encrypt", s);
+			send(socket_desc, tmp, 344, 0);
+			memset(tmp, 0, 344);
+			memset(s, 0, 256);
 		}
-		char *tmp =  call_python_module("aes", "encrypt", s);
-		send(socket_desc, tmp, 344, 0);
-		memset(tmp, 0, 344);
-		memset(s, 0, 256);
 	}
 	destroy_win(input_win);
 }
