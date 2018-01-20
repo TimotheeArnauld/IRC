@@ -16,7 +16,7 @@ char* command_analyse(char s[256]){
 			exit(0);
 		}
 		else{
-			return tmp;
+			return command;
 		}
 	}
 
