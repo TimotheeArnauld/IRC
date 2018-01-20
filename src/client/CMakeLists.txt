@@ -8,8 +8,8 @@ find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 find_package (Threads)
 
-set(SRCS main.c)    
-set(HEADERS main.h)
+set(SRCS main.c command.c)    
+set(HEADERS main.h command.h)
 
 add_executable(client ${SRCS} ${HEADERS})
 target_link_libraries(client ${CURSES_LIBRARIES} ${PYTHON_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
