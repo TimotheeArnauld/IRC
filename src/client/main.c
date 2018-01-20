@@ -98,11 +98,12 @@ void *send_message(void *t){
 		if(strcmp(cmd, "-1") == 0){
 			printf("Bad instruction or command. Type /help to see available commands");
 		}else{
-			char *tmp =  call_python_module("aes", "encrypt", cmd);
-			send(socket_desc, tmp, 344, 0);
-			memset(tmp, 0, 344);
-			memset(s, 0, 256);
-		}
+		 	char *tmp =  call_python_module("aes", "encrypt", cmd);
+		 	printf("%s", tmp);
+		// 	send(socket_desc, tmp, 344, 0);
+		// 	memset(tmp, 0, 344);
+		// 	memset(s, 0, 256);
+		// }
 	}
 	destroy_win(input_win);
 }
