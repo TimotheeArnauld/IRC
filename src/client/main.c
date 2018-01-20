@@ -94,11 +94,11 @@ void *send_message(void *t){
 		char s[256];
 		mvwgetstr(input_win, 1, sizeof("Message>>") + 1, s);
 
-		char *cmd = command_analyse(s);
+		char cmd[256] = command_analyse(s);
 		if(strcmp(cmd, "-1") == 0){
 			printf("Bad instruction or command. Type /help to see available commands");
 		}else{
-			char *tmp =  call_python_module("aes", "encrypt", s);
+			char *tmp =  call_python_module("aes", "encrypt", cmd);
 			send(socket_desc, tmp, 344, 0);
 			memset(tmp, 0, 344);
 			memset(s, 0, 256);
